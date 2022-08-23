@@ -11,15 +11,16 @@ DATABASE_URL = os.environ['DATABASE_URL']
 
 # ここには Flask 固有の記述はありません
 # App はフレームワークやランタイムに一切依存しません
-@app.message("check")
-def checkCount(message, say):
+@app.command("/check")
+def response(ack, say, command):
+    ack()
     with psycopg2.connect(DATABASE_URL, sslmode='require') as conn:
         with conn.cursor() as cur:
-            cur.execute('SELECT message_text FROM messages WHERE message_id = (SELECT * FROM today_count)')
+            cur.execute('SELECT message_text FROM messages WHERE message_id = (SELECT message_id FROM today_count)')
             data = cur.fetchall()
 
     message_text = data[0][0]
-    say(message_text)
+    say(f"{command[message_text]}")
 
 # Flask アプリを初期化します
 from flask import Flask, request
