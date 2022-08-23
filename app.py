@@ -20,7 +20,7 @@ def response(ack, say, command):
             data = cur.fetchall()
 
     message_text = data[0][0]
-    say(f"{command[message_text]}")
+    say(message_text)
 
 # Flask アプリを初期化します
 from flask import Flask, request
